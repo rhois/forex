@@ -6,6 +6,9 @@ import {
   Grid,
   Segment,
   Button,
+  Dropdown,
+  Dimmer,
+  Loader,
 } from 'semantic-ui-react';
 import { styles } from './styles';
 
@@ -13,20 +16,160 @@ export class PageHomeComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      idCompany: 1,
+      isEnable: false,
+      currentValue: '',
+      base: 'USD',
+      initDefault: 10,
+      symbols: ['IDR', 'EUR', 'GBP', 'SGD'],
+      loading: false,
     };
   }
   componentDidMount() {
     const {
-        updateLatest,
+      updateLatestSymbols,
     } = this.props;
 
     setTimeout(() => {
-        updateLatest();
+      updateLatestSymbols(
+        this.state.base,
+        this.state.initDefault,
+        this.state.symbols,
+      );
+    }, 500);
+  }
+  onSubmitCurreny() {
+    const {
+      updateLatestSymbols,
+      resetData,
+    } = this.props;
+    const {
+      base,
+      initDefault,
+      symbols,
+      currentValue,
+    } = this.state;
+    let sym = symbols;
+    sym.push(currentValue);
+    this.setState({
+      isEnable: false,
+      symbols: sym,
+    });
+    resetData();
+    setTimeout(() => {
+      updateLatestSymbols(base, initDefault, symbols);
+    }, 500);
+  }
+  deleteItem(val) {
+    const {
+      updateLatestSymbols,
+      resetData,
+    } = this.props;
+    const {
+      base,
+      initDefault,
+      symbols,
+    } = this.state;
+    const filterArray = symbols.filter(function(ele){
+      return ele !== val;
+    });
+    resetData();
+    setTimeout(() => {
+      updateLatestSymbols(base, initDefault, filterArray);
+      this.setState({ symbols: filterArray });
     }, 500);
   }
   render() {
-    console.log(this.props);
+    const {
+      currencies,
+      isLoaded,
+    } = this.props;
+    const currenciesOption = [
+      {
+        key: 'usd',
+        value: 'USD',
+        text: 'USD',
+      },
+      {
+        key: 'cad',
+        value: 'CAD',
+        text: 'CAD',
+      },
+      {
+        key: 'idr',
+        value: 'IDR',
+        text: 'IDR',
+      },
+      {
+        key: 'gbp',
+        value: 'GBP',
+        text: 'GBP',
+      },
+      {
+        key: 'chf',
+        value: 'CHF',
+        text: 'CHF',
+      },
+      {
+        key: 'sgd',
+        value: 'SGD',
+        text: 'SGD',
+      },
+      {
+        key: 'inr',
+        value: 'INR',
+        text: 'INR',
+      },
+      {
+        key: 'myr',
+        value: 'MYR',
+        text: 'MYR',
+      },
+      {
+        key: 'jpy',
+        value: 'JPY',
+        text: 'JPY',
+      },
+      {
+        key: 'krw',
+        value: 'KRW',
+        text: 'KRW',
+      },
+    ];
+
+    const filteredArray = currenciesOption.filter((x) => { 
+      return (this.state.symbols).indexOf(x.value) < 0;
+    });
+
+    const renderButton = () => {
+      if(this.state.isEnable) {
+        return (
+          <div style={styles.boxDropdown}>
+            <Dropdown
+              clearable
+              fluid
+              search
+              selection
+              options={filteredArray}
+              placeholder='Select Currencies'
+              onChange={(e, { value }) => {
+                this.setState({ currentValue: value });
+              }}
+            />
+            <Button content='Submit' primary onClick={() => this.onSubmitCurreny()} />
+          </div>
+        );
+      }
+      return (
+        <Button fluid onClick={() => this.setState({ isEnable: true })} content='Add More Currencies' icon='add' labelPosition='left' />
+      );
+    };
+    if (isLoaded === false) {
+      return (
+        <Dimmer active inverted>
+          <Loader inverted content='Loading' />
+        </Dimmer>
+      );
+    }
     return (
       <div>
         <Header as='h1' style={styles.headTitle} content='Foreign Exchange Currency App' textAlign='center' />
@@ -39,132 +182,47 @@ export class PageHomeComponent extends Component {
                 </h2>
                 <div style={styles.currencyTitle}>
                   <strong>USD</strong>
-                  <strong>10.000</strong>
+                  <strong>10.0000</strong>
                 </div>
               </div>
             </Grid.Column>
           </Grid.Row>
+          {
+            currencies.map(item => (
+              <Grid.Row columns={1} key={item.rates}>
+                <Grid.Column>
+                  <Segment>
+                    <Grid>
+                      <Grid.Row columns={2}>
+                        <Grid.Column width={14}>
+                          <div>
+                            <div style={styles.titleList}>
+                              <h2>{item.rates} </h2>
+                              <strong style={styles.titleItem}>{item.calculation}</strong>
+                            </div>
+                            <p>
+                              <em><strong>{item.rates} - {item.title}</strong></em>
+                            </p>
+                            <p>
+                              <em>1 USD = {item.rates} <strong>{item.value}</strong></em>
+                            </p>
+                          </div>
+                        </Grid.Column>
+                        <Grid.Column width={2}>
+                          <div style={styles.styleActions}>
+                            <Icon link name='close' size='large' onClick={() => this.deleteItem(item.rates)} />
+                          </div>
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
+                  </Segment>
+                </Grid.Column>
+              </Grid.Row>
+            ))
+          }
           <Grid.Row columns={1}>
             <Grid.Column>
-              <Segment>
-                <Grid>
-                  <Grid.Row columns={2}>
-                    <Grid.Column width={14}>
-                      <div>
-                        <div style={styles.titleList}>
-                          <h2>IDR </h2>
-                          <strong style={styles.titleItem}>144,104.50</strong>
-                        </div>
-                        <p>
-                          <em><strong>IDR - Indonesian Rupiah</strong></em>
-                        </p>
-                        <p>
-                          <em>1 USD = IDR 14,410.45</em>
-                        </p>
-                      </div>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                      <div style={styles.styleActions}>
-                        <Icon link name='close' size='large' />
-                      </div>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={1}>
-            <Grid.Column>
-              <Segment>
-                <Grid>
-                  <Grid.Row columns={2}>
-                    <Grid.Column width={14}>
-                      <div>
-                        <div style={styles.titleList}>
-                          <h2>EUR </h2>
-                          <strong style={styles.titleItem}>8.5694</strong>
-                        </div>
-                        <p>
-                          <em><strong>EUR - Euro</strong></em>
-                        </p>
-                        <p>
-                          <em>1 USD = EUR 0.8569</em>
-                        </p>
-                      </div>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                      <div style={styles.styleActions}>
-                        <Icon link name='close' size='large' />
-                      </div>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={1}>
-            <Grid.Column>
-              <Segment>
-                <Grid>
-                  <Grid.Row columns={2}>
-                    <Grid.Column width={14}>
-                      <div>
-                        <div style={styles.titleList}>
-                          <h2>GBP </h2>
-                          <strong style={styles.titleItem}>7.5894</strong>
-                        </div>
-                        <p>
-                          <em><strong>GBP - British Pound</strong></em>
-                        </p>
-                        <p>
-                          <em>1 USD = GBP 0.7589</em>
-                        </p>
-                      </div>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                      <div style={styles.styleActions}>
-                        <Icon link name='close' size='large' />
-                      </div>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={1}>
-            <Grid.Column>
-              <Segment>
-                <Grid>
-                  <Grid.Row columns={2}>
-                    <Grid.Column width={14}>
-                      <div>
-                        <div style={styles.titleList}>
-                          <h2>SGD </h2>
-                          <strong style={styles.titleItem}>13.6637</strong>
-                        </div>
-                        <p>
-                          <em><strong>SGD - Singapore Dollar</strong></em>
-                        </p>
-                        <p>
-                          <em>1 USD = SGD 1.3664</em>
-                        </p>
-                      </div>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                      <div style={styles.styleActions}>
-                        <Icon link name='close' size='large' />
-                      </div>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={1}>
-            <Grid.Column>
-              <div>
-                <Button fluid content='Add More Currencies' icon='add' labelPosition='left' />
-              </div>
+              {renderButton()}
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -174,7 +232,10 @@ export class PageHomeComponent extends Component {
 }
 
 PageHomeComponent.propTypes = {
-    updateLatest: PropTypes.func.isRequired,
+  updateLatestSymbols: PropTypes.func.isRequired,
+  resetData: PropTypes.func.isRequired,
+  currencies: PropTypes.array.isRequired,
+  isLoaded: PropTypes.bool.isRequired,
 };
 
 export default PageHomeComponent;

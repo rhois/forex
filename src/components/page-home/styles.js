@@ -28,7 +28,11 @@ export const styles = {
     titleItem: {
         fontSize: '1.71428571rem',
     },
-  };
-  
-  export default styles;
+    boxDropdown: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+};
+
+export default styles;
   

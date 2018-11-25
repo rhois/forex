@@ -7,100 +7,37 @@
 		"rates": {
 			"type": "object",
 			"properties": {
-				"BGN": {
+				"USD": {
 					"type": "number"
 				},
 				"CAD": {
 					"type": "number"
 				},
-				"BRL": {
-					"type": "number"
-				},
-				"HUF": {
-					"type": "number"
-				},
-				"DKK": {
-					"type": "number"
-				},
-				"JPY": {
-					"type": "number"
-				},
-				"ILS": {
-					"type": "number"
-				},
-				"TRY": {
-					"type": "number"
-				},
-				"RON": {
+				"IDR": {
 					"type": "number"
 				},
 				"GBP": {
 					"type": "number"
 				},
-				"PHP": {
-					"type": "number"
-				},
-				"HRK": {
-					"type": "number"
-				},
-				"NOK": {
-					"type": "number"
-				},
-				"USD": {
-					"type": "number"
-				},
-				"MXN": {
-					"type": "number"
-				},
-				"AUD": {
-					"type": "number"
-				},
-				"IDR": {
-					"type": "number"
-				},
-				"KRW": {
-					"type": "number"
-				},
-				"HKD": {
-					"type": "number"
-				},
-				"ZAR": {
-					"type": "number"
-				},
-				"ISK": {
-					"type": "number"
-				},
-				"CZK": {
-					"type": "number"
-				},
-				"THB": {
-					"type": "number"
-				},
-				"MYR": {
-					"type": "number"
-				},
-				"NZD": {
-					"type": "number"
-				},
-				"PLN": {
-					"type": "number"
-				},
-				"SEK": {
-					"type": "number"
-				},
-				"RUB": {
-					"type": "number"
-				},
-				"CNY": {
+				"CHF": {
 					"type": "number"
 				},
 				"SGD": {
 					"type": "number"
 				},
-				"CHF": {
+				"INR": {
 					"type": "number"
 				},
-				"INR": {
+				"MYR": {
+					"type": "number"
+				},
+				"JPY": {
+					"type": "number"
+				},
+				"KRW": {
+					"type": "number"
+				},
+				"EUR": {
 					"type": "number"
 				}
 			}
