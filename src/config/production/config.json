@@ -1,0 +1,4 @@
+{
+    "env": "production",
+    "url": "https://api.exchangeratesapi.io"
+}
