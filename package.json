@@ -5,7 +5,7 @@
   "dependencies": {
     "dotenv": "^6.1.0",
     "is-my-json-valid": "^2.19.0",
-    "lodash": "^4.17.11",
+    "lodash": "latest",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
